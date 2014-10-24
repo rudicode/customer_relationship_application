@@ -7,7 +7,7 @@ class CRM
 
   def initialize name
     @name = name
-    @rolodex = Rolodex.new
+    @rolodex = Rolodex.new "my rolodex"
     @notice = ""
   end
 
