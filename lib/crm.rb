@@ -31,7 +31,7 @@ class CRM
 
 CRMMENU
     puts menu
-    print "Choose an option: "
+    print "Choose an option: -> "
   end
 
   def get_input
@@ -53,7 +53,24 @@ CRMMENU
   end
 
   def add_contact
-    puts "#{self.class}##{__method__} Not implamented yet!!"
+    # puts "#{self.class}##{__method__} Not implamented yet!!"
+    clear_screen
+    puts "ADD CONTACT\n\n"
+
+    print "First name: "
+    first_name = gets.chomp().to_s
+
+    print "Last name : "
+    last_name = gets.chomp().to_s
+
+    print "email     : "
+    email = gets.chomp().to_s
+
+    print "Notes     :"
+    notes = gets.chomp().to_s
+
+    # store new contact here
+
   end
 
   def modify_contact
@@ -75,4 +92,10 @@ CRMMENU
   def delete_contact
     puts "#{self.class}##{__method__} Not implamented yet!!"
   end
+
+  private
+    def clear_screen
+      puts"\e[H\e[2J"
+    end
+
 end
