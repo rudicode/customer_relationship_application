@@ -7,9 +7,12 @@ class CRM
 
   def initialize name
     @name = name
+    @rolodex = Rolodex.new
+    @notice = ""
   end
 
   def main_menu
+    clear_screen
     while true
       display_menu
       input = get_input
@@ -20,6 +23,9 @@ class CRM
 
   def display_menu
     menu = <<CRMMENU
+    #{@notice}
+
+    #{@name}
 
     [1] Add Contact
     [2] Modify Contact
@@ -30,8 +36,10 @@ class CRM
     [7] Exit
 
 CRMMENU
+    clear_screen
     puts menu
     print "Choose an option: -> "
+    clear_notice
   end
 
   def get_input
@@ -48,7 +56,7 @@ CRMMENU
     when 5 then display_attribute
     when 6 then delete_contact
     else
-      puts "#{option} is not a valid option."
+      @notice = "#{option} is not a valid option."
     end
   end
 
@@ -66,31 +74,36 @@ CRMMENU
     print "email     : "
     email = gets.chomp().to_s
 
-    print "Notes     :"
+    print "Notes     : "
     notes = gets.chomp().to_s
 
     # store new contact here
+    @rolodex.add_contact first_name, last_name, email, notes
+
+    wait_for_enter
+    # no error checking yet, assume it was added.
+    @notice = "#{first_name} #{last_name} added to contacts."
 
   end
 
   def modify_contact
-    puts "#{self.class}##{__method__} Not implamented yet!!"
+    @notice = "#{self.class}##{__method__} Not implamented yet!!"
   end
 
   def display_all_contacts
-    puts "#{self.class}##{__method__} Not implamented yet!!"
+    @notice = "#{self.class}##{__method__} Not implamented yet!!"
   end
 
   def display_contact
-    puts "#{self.class}##{__method__} Not implamented yet!!"
+    @notice = "#{self.class}##{__method__} Not implamented yet!!"
   end
 
   def display_attribute
-    puts "#{self.class}##{__method__} Not implamented yet!!"
+    @notice = "#{self.class}##{__method__} Not implamented yet!!"
   end
 
   def delete_contact
-    puts "#{self.class}##{__method__} Not implamented yet!!"
+    @notice = "#{self.class}##{__method__} Not implamented yet!!"
   end
 
   private
@@ -98,4 +111,12 @@ CRMMENU
       puts"\e[H\e[2J"
     end
 
+    def wait_for_enter
+      print"\nPress ENTER to continue."
+      gets
+    end
+
+    def clear_notice
+      @notice = ""
+    end
 end
