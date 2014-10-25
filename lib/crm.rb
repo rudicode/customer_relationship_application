@@ -58,6 +58,7 @@ class CRM
     when 6 then delete_contact
     else
       @notice = "#{option} is not a valid option."
+      binding.pry
     end
   end
 
