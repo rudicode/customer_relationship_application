@@ -22,20 +22,21 @@ class CRM
   end
 
   def display_menu
-    menu = <<CRMMENU
-    #{@notice}
+    menu = %{
+      #{@notice}
 
-    #{@name}
+      #{@name}
 
-    [1] Add Contact
-    [2] Modify Contact
-    [3] Display All
-    [4] Display Contact
-    [5] Display Attribute
-    [6] Delete Contact
-    [7] Exit
+      [1] Add Contact
+      [2] Modify Contact
+      [3] Display All
+      [4] Display Contact
+      [5] Display Attribute
+      [6] Delete Contact
+      [7] Exit
 
-CRMMENU
+    }
+
     clear_screen
     puts menu
     print "Choose an option: -> "
@@ -61,7 +62,6 @@ CRMMENU
   end
 
   def add_contact
-    # puts "#{self.class}##{__method__} Not implamented yet!!"
     clear_screen
     puts "ADD CONTACT\n\n"
 
@@ -85,26 +85,36 @@ CRMMENU
     @notice = "#{first_name} #{last_name} added to contacts."
 
   end
-
-  def modify_contact
-    @notice = "#{self.class}##{__method__} Not implamented yet!!"
+ 
+  def self.stub(*names)
+    names.each do |name|
+      define_method(name) do
+        @notice = "#{self.class}##{name} Not implemented yet!!"
+      end
+    end
   end
 
-  def display_all_contacts
-    @notice = "#{self.class}##{__method__} Not implamented yet!!"
-  end
+  stub :modify_contact, :display_all_contacts, :display_contact, :display_attribute, :delete_contact
 
-  def display_contact
-    @notice = "#{self.class}##{__method__} Not implamented yet!!"
-  end
+  # def modify_contact
+  #   @notice = "#{self.class}##{__method__} Not implemented yet!!"
+  # end
 
-  def display_attribute
-    @notice = "#{self.class}##{__method__} Not implamented yet!!"
-  end
+  # def display_all_contacts
+  #   @notice = "#{self.class}##{__method__} Not implemented yet!!"
+  # end
 
-  def delete_contact
-    @notice = "#{self.class}##{__method__} Not implamented yet!!"
-  end
+  # def display_contact
+  #   @notice = "#{self.class}##{__method__} Not implemented yet!!"
+  # end
+
+  # def display_attribute
+  #   @notice = "#{self.class}##{__method__} Not implemented yet!!"
+  # end
+
+  # def delete_contact
+  #   @notice = "#{self.class}##{__method__} Not implemented yet!!"
+  # end
 
   private
     def clear_screen
