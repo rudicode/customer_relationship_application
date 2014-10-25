@@ -65,7 +65,56 @@ class CRM
 
   def add_contact
     clear_screen
-    puts "ADD CONTACT\n\n"
+    
+    first_name, last_name, email, notes = get_contact_input "ADD CONTACT\n\n"
+    
+    @rolodex.add_contact first_name, last_name, email, notes
+
+    wait_for_enter
+    # no error checking yet, assume it was added.
+    @notice = "#{first_name} #{last_name} added to contacts."
+
+  end
+
+  def display_all_contacts
+
+    puts
+    puts columnize " ID ", "First", "Last", "Email", "Notes"
+    puts columnize "----", "-----", "----", "-----", "-----"
+    puts
+
+    @rolodex.contacts.each do |contact|
+
+      puts columnize contact.id, contact.first_name, contact.last_name,
+                     contact.email, contact.notes
+      puts
+
+    end
+    puts "\nDisplayed #{@rolodex.contacts.count} contact(s)."
+    wait_for_enter
+  end
+
+  def modify_contact
+    display_all_contacts
+    print "Enter the ID of the contact to edit."
+    input_id = gets.chomp().to_i
+    
+    first_name, last_name, email, notes = get_contact_input "Edit Contact #{input_id}"
+    
+    contact = @rolodex.update_contact input_id, first_name, last_name, email, notes
+    
+    if contact
+      @notice = "Contact #{input_id} was updated."
+    else
+      @notice = "Contact with ID #{input_id} does not exist."
+    end
+
+  end
+
+  def get_contact_input message
+    # routine to get the contact input from user.
+    clear_screen
+    puts "#{message}\n\n"
 
     print "First name: "
     first_name = gets.chomp().to_s
@@ -78,30 +127,7 @@ class CRM
 
     print "Notes     : "
     notes = gets.chomp().to_s
-
-    @rolodex.add_contact first_name, last_name, email, notes
-
-    wait_for_enter
-    # no error checking yet, assume it was added.
-    @notice = "#{first_name} #{last_name} added to contacts."
-
-  end
-
-  def display_all_contacts
-
-    puts
-    puts columnize "First", "Last", "Email", "Notes"
-    puts columnize "-----", "----", "-----", "-----"
-
-    @rolodex.contacts.each do |contact|
-
-      puts columnize contact.first_name, contact.last_name,
-                     contact.email, contact.notes
-      puts
-
-    end
-    puts "\nDisplayed #{@rolodex.contacts.count} contact(s)."
-    wait_for_enter
+    return first_name, last_name, email, notes
   end
 
   private
@@ -115,7 +141,7 @@ class CRM
       end
     end
 
-  stub :modify_contact, :display_contact, :display_attribute, :delete_contact
+  stub :display_contact, :display_attribute, :delete_contact
 
 
     def clear_screen
@@ -149,11 +175,13 @@ class CRM
         first_name = first.sample
         last_name = last.sample
         email = first_name + "." + last_name + "@" + domain.sample + email_suffix.sample
-        @rolodex.add_contact first_name, last_name, email, notes
+        
+        @rolodex.add_contact first_name, last_name, email.downcase, notes
       end
     end
 
-    def columnize a, b, c, d
-      a.ljust(12) + b.ljust(12) + c.ljust(32) + d
+    def columnize id, a, b, c, d
+      left_padding = "  "
+      left_padding + id.to_s.ljust(6) + a.ljust(10) + b.ljust(16) + c.ljust(32) + d
     end
 end

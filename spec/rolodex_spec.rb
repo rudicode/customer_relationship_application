@@ -40,7 +40,50 @@ describe Rolodex do
 
   end
 
-  describe "have all contacts" do
+  describe "find_contact_by_id" do
+    before :each  do
+      @first_name = "Homer"
+      @last_name = "Simpson"
+      @email = "homer@home.com"
+      @notes = "Likes duff"
+      @index = @rolodex.index
+      @rolodex.add_contact @first_name, @last_name, @email, @notes
+    end
 
+    it "should find the contact by id" do
+      contact = @rolodex.find_contact_by_id @index
+      expect(contact.first_name).to eq @first_name
+      expect(contact.last_name).to eq @last_name
+      expect(contact.email).to eq @email
+      expect(contact.notes).to eq @notes
+    end
+
+  end
+
+  describe "update_contact" do
+    before(:each) do
+      @first_name = "Homer"
+      @last_name = "Simpson"
+      @email = "homer@home.com"
+      @notes = "Likes duff"
+      @index = @rolodex.index
+      @rolodex.add_contact @first_name, @last_name, @email, @notes
+    end
+
+    it "should update the contact" do
+      first_name = "Bart"
+      last_name  = "Simpson"
+      email      = "bart@school.com"
+      notes      = "Skateboarding kid."
+      @new_contact = Contact.new first_name, last_name, email, notes
+
+      @rolodex.update_contact 501, first_name, last_name, email, notes
+      updated_contact = @rolodex.find_contact_by_id 501
+
+      expect(updated_contact.first_name).to eq first_name
+      expect(updated_contact.last_name).to eq last_name
+      expect(updated_contact.email).to eq email
+      expect(updated_contact.notes).to eq notes
+    end
   end
 end
