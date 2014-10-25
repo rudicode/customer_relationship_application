@@ -27,13 +27,13 @@ class CRM
 
       #{@name}
 
-      [1] Add Contact
-      [2] Modify Contact
-      [3] Display All
-      [4] Display Contact
-      [5] Display Attribute
-      [6] Delete Contact
-      [7] Exit
+      [ 1 ] Add Contact
+      [ 2 ] Modify Contact
+      [ 3 ] Display All
+      [ 4 ] Display Contact
+      [ 5 ] Display Attribute
+      [ 6 ] Delete Contact
+      [ 7 ] Exit
 
     }
 
@@ -56,9 +56,9 @@ class CRM
     when 4 then display_contact
     when 5 then display_attribute
     when 6 then delete_contact
+    when 99 then trigger_pry
     else
       @notice = "#{option} is not a valid option."
-      binding.pry
     end
   end
 
@@ -78,7 +78,6 @@ class CRM
     print "Notes     : "
     notes = gets.chomp().to_s
 
-    # store new contact here
     @rolodex.add_contact first_name, last_name, email, notes
 
     wait_for_enter
@@ -87,9 +86,17 @@ class CRM
 
   end
 
+  def display_all_contacts
+    @rolodex.contacts.each do |contact|
+      puts contact
+    end
+    wait_for_enter
+  end
+
   private
 
     def self.stub(*names)
+      # refactored with help from ...
       names.each do |name|
         define_method(name) do
           @notice = "#{self.class}##{name} Not implemented yet!!"
@@ -97,7 +104,7 @@ class CRM
       end
     end
 
-  stub :modify_contact, :display_all_contacts, :display_contact, :display_attribute, :delete_contact
+  stub :modify_contact, :display_contact, :display_attribute, :delete_contact
 
 
     def clear_screen
@@ -111,5 +118,11 @@ class CRM
 
     def clear_notice
       @notice = ""
+    end
+
+    def trigger_pry
+      # need to have the pry gem installed to use this
+      # also the pry-byebug gem for ruby 2.x.x, adds debugger
+      binding.pry
     end
 end
