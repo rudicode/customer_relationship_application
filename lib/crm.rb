@@ -85,38 +85,20 @@ class CRM
     @notice = "#{first_name} #{last_name} added to contacts."
 
   end
- 
-  def self.stub(*names)
-    names.each do |name|
-      define_method(name) do
-        @notice = "#{self.class}##{name} Not implemented yet!!"
+
+  private
+
+    def self.stub(*names)
+      names.each do |name|
+        define_method(name) do
+          @notice = "#{self.class}##{name} Not implemented yet!!"
+        end
       end
     end
-  end
 
   stub :modify_contact, :display_all_contacts, :display_contact, :display_attribute, :delete_contact
 
-  # def modify_contact
-  #   @notice = "#{self.class}##{__method__} Not implemented yet!!"
-  # end
 
-  # def display_all_contacts
-  #   @notice = "#{self.class}##{__method__} Not implemented yet!!"
-  # end
-
-  # def display_contact
-  #   @notice = "#{self.class}##{__method__} Not implemented yet!!"
-  # end
-
-  # def display_attribute
-  #   @notice = "#{self.class}##{__method__} Not implemented yet!!"
-  # end
-
-  # def delete_contact
-  #   @notice = "#{self.class}##{__method__} Not implemented yet!!"
-  # end
-
-  private
     def clear_screen
       puts"\e[H\e[2J"
     end

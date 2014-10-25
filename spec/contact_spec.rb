@@ -9,13 +9,15 @@ describe Contact do
   	@contact = Contact.new @first_name, @last_name, @email, @notes
   end
 
-  it "should keep contact data" do
-  	expect(@contact.first_name).to eq @first_name
+  it "should allow access to data" do
+    expect(@contact.first_name).to eq @first_name
+    expect(@contact.last_name).to be @last_name
+    expect(@contact.email).to be @email
+    expect(@contact.notes).to be @notes
   end
 
-  it "should respond to id" do
-  	# this spec needs to be moved to Rolodex and checked
-  	# after a contact is created
-  	expect(@contact.id).to_not be nil 
+  it "should return full_name" do
+    expect(@contact.full_name).to eq "#{@first_name} #{@last_name}"
   end
+
 end

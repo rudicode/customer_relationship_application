@@ -10,4 +10,7 @@ class Contact
     @notes = notes
   end
 
+  def full_name
+    @first_name + " " + @last_name
+  end
 end

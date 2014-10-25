@@ -17,16 +17,26 @@ describe Rolodex do
       @email = "homer@home.com"
       @notes = "Likes duff"
     end
+
     it "should add new contact" do
-      @rolodex.add_contact @first_name, @last_name, @email, @notes
-      # expectation here??
+      expect do
+        @rolodex.add_contact @first_name, @last_name, @email, @notes
+      end.to change{@rolodex.contacts.length}.by(1)
     end
 
-    it "should incrament the contact index" do
-      
+    it "should add the correct contact" do
+      @rolodex.add_contact @first_name, @last_name, @email, @notes
+      expect(@rolodex.contacts.last.first_name).to be @first_name
+      expect(@rolodex.contacts.last.last_name).to be @last_name
+      expect(@rolodex.contacts.last.email).to be @email
+      expect(@rolodex.contacts.last.notes).to be @notes
+    end
+
+    it "should increment the contact index" do
       expect do 
         @rolodex.add_contact @first_name, @last_name, @email, @notes
       end.to change{@rolodex.index}.by(1)
     end
+
   end
 end
