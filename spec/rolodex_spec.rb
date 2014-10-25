@@ -39,4 +39,8 @@ describe Rolodex do
     end
 
   end
+
+  describe "have all contacts" do
+
+  end
 end

@@ -57,6 +57,7 @@ class CRM
     when 5 then display_attribute
     when 6 then delete_contact
     when 99 then trigger_pry
+    when 98 then add_a_bunch_of_contacts_so_i_dont_have_to_keep_typing_them_out
     else
       @notice = "#{option} is not a valid option."
     end
@@ -87,9 +88,19 @@ class CRM
   end
 
   def display_all_contacts
+
+    puts
+    puts columnize "First", "Last", "Email", "Notes"
+    puts columnize "-----", "----", "-----", "-----"
+
     @rolodex.contacts.each do |contact|
-      puts contact
+
+      puts columnize contact.first_name, contact.last_name,
+                     contact.email, contact.notes
+      puts
+
     end
+    puts "\nDisplayed #{@rolodex.contacts.count} contact(s)."
     wait_for_enter
   end
 
@@ -124,5 +135,25 @@ class CRM
       # need to have the pry gem installed to use this
       # also the pry-byebug gem for ruby 2.x.x, adds debugger
       binding.pry
+    end
+
+    def add_a_bunch_of_contacts_so_i_dont_have_to_keep_typing_them_out
+
+      first = ["Andy", "Jim", "Mary", "Amy", "George", "Lucas", "Chris", "Matt", "Sarah", "Julie"]
+      last = ["Smith", "Martinez", "Parker", "Black", "Johnson", "King", "Nolin", "Verges", "Kerns"]
+      domain = ["google", "bell", "example", "sympatico", "rogers", "hotmail"]
+      email_suffix = [".com", ".net", ".org", ".tv"]
+      notes = "Some notes go here."
+
+      11.times do |count|
+        first_name = first.sample
+        last_name = last.sample
+        email = first_name + "." + last_name + "@" + domain.sample + email_suffix.sample
+        @rolodex.add_contact first_name, last_name, email, notes
+      end
+    end
+
+    def columnize a, b, c, d
+      a.ljust(12) + b.ljust(12) + c.ljust(32) + d
     end
 end

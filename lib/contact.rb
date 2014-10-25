@@ -15,6 +15,6 @@ class Contact
   end
 
   def to_s
-  	"#{@first_name} #{@last_name} #{@email} [ #{@notes} ]"
+    "#{@first_name}\t#{@last_name}\t#{@email}\t  #{@notes}"
   end
 end
