@@ -1,4 +1,4 @@
-require 'pry'
+# require 'pry'
 require 'csv'
 
 require_relative 'lib/contact'
