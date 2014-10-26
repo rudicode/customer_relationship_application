@@ -1,4 +1,5 @@
 require_relative '../lib/rolodex'
+require_relative '../lib/persistence'
 
 describe Rolodex do
   before :each do
