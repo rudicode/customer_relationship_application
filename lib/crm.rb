@@ -86,20 +86,16 @@ class CRM
 
     display_header
 
-    display_line = 1
+    lines = []
     
     @rolodex.contacts.each do |contact|
-
-      puts columnize contact.id, contact.first_name, contact.last_name,
-                     contact.email, contact.notes
-      puts
-      if display_line >= 12
-        wait_for_enter
-        puts
-        display_line = 1
-      end
-      display_line += 1
+      lines << columnize(contact.id, contact.first_name, contact.last_name,
+                     contact.email, contact.notes)
+      lines << "\n"
     end
+
+    display_with_pages lines
+
     puts "\nDisplayed #{@rolodex.contacts.count} contact(s)."
 
   end
@@ -111,17 +107,18 @@ class CRM
     attributes.each_with_index do |attribute,index|
       message += "    [ #{index} ] #{attribute}\n"
     end
+
     message += "\n Enter attribute number -> "
     
     attribute_number = get_number_from_user message
-  puts attribute_number
+
     unless attribute_number.between?(0,attributes.length) 
       @notice = "Error, did not select attribute."
       return
     end
 
     clear_screen
-    display_line = 1
+
     puts "Display attribute: #{attributes[attribute_number]}\n"
     puts "-------------------------------"
 
@@ -132,7 +129,9 @@ class CRM
       lines << current_attribute
       lines << "\n"
     end
+    
     display_with_pages lines
+
   end
 
   def display_with_pages lines
