@@ -1,3 +1,4 @@
+
 class Rolodex
   attr_reader :name, :index, :contacts, :deleted_contacts
   def initialize name
@@ -5,7 +6,11 @@ class Rolodex
     @index = 501
     @contacts = []
     @deleted_contacts = []
+    @persistence = Persistence.new @name
+    load_rolodex
   end
+
+  
 
   def add_contact first_name, last_name, email, notes
     contact = Contact.new first_name, last_name, email, notes
@@ -59,5 +64,30 @@ class Rolodex
       @contacts << deleted_contact
       @deleted_contacts.delete deleted_contact
     end
+  end
+
+
+  def load_rolodex
+    return unless @persistence.list
+
+    highest_id = @index
+
+    @persistence.list.each do |row|
+      contact = Contact.new row[1], row[2], row[3], row[4]
+      contact.id = row[0]
+      @contacts << contact
+      highest_id = contact.id if contact.id > highest_id
+    end
+    @index = highest_id + 1
+  end
+
+  def save_rolodex
+    # uses @persistence to save the rolodex.
+    data = []
+    @contacts.each do |contact|
+      data << [contact.id, contact.first_name, contact.last_name,
+               contact.email, contact.notes]
+    end
+    @persistence.save_data data
   end
 end

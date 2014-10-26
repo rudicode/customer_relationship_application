@@ -7,7 +7,7 @@ class CRM
 
   def initialize name
     @name = name
-    @rolodex = Rolodex.new "my rolodex"
+    @rolodex = Rolodex.new "rolodex_1"
     @notice = ""
   end
 
@@ -34,6 +34,7 @@ class CRM
       [ 5 ] Display Attribute           Debug options
       [ 6 ] Delete Contact          [ 98 ] Add Random contacts
       [ 7 ] Undelete Contact        [ 99 ] Trigger pry
+      [ 8 ] Save Contacts
       [ 9 ] Exit
 
     }
@@ -57,6 +58,7 @@ class CRM
     when 5 then display_attribute
     when 6 then delete_contact
     when 7 then undelete_contact
+    when 8 then save_contacts
     when 9 then return
     when 99 then trigger_pry
     when 98 then add_a_bunch_of_contacts_so_i_dont_have_to_keep_typing_them_out
@@ -161,6 +163,10 @@ class CRM
     else
       @notice = "Contact ID #{input_id} does not exist."
     end
+  end
+
+  def save_contacts
+    @rolodex.save_rolodex
   end
 
   private
