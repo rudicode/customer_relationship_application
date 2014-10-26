@@ -17,7 +17,7 @@ class CRM
       display_menu
       input = get_input
       process_option input
-      break if input == 7
+      break if input == 9
     end
   end
 
@@ -33,7 +33,8 @@ class CRM
       [ 4 ] Display Contact
       [ 5 ] Display Attribute
       [ 6 ] Delete Contact
-      [ 7 ] Exit
+      [ 7 ] Undelete Contact
+      [ 9 ] Exit
 
     }
 
@@ -56,11 +57,13 @@ class CRM
     when 4 then display_contact
     when 5 then display_attribute
     when 6 then delete_contact
+    when 7 then undelete_contact
     when 99 then trigger_pry
     when 98 then add_a_bunch_of_contacts_so_i_dont_have_to_keep_typing_them_out
     else
       @notice = "#{option} is not a valid option."
     end
+    wait_for_enter
   end
 
   def add_contact
@@ -70,7 +73,8 @@ class CRM
     
     @rolodex.add_contact first_name, last_name, email, notes
 
-    wait_for_enter
+    # wait_for_enter
+    
     # no error checking yet, assume it was added.
     @notice = "#{first_name} #{last_name} added to contacts."
 
@@ -88,7 +92,7 @@ class CRM
 
     end
     puts "\nDisplayed #{@rolodex.contacts.count} contact(s)."
-    wait_for_enter
+    # wait_for_enter
   end
 
   def modify_contact
@@ -121,7 +125,7 @@ class CRM
                      contact.email, contact.notes
     puts
 
-    wait_for_enter
+    # wait_for_enter
 
     return input_id
     
@@ -130,9 +134,30 @@ class CRM
   def delete_contact
     contact_id = display_contact "Enter the ID of the contact to DELETE: "
     
-    puts "Are you sure you want to delete this contact. y/n"
+    print "Are you sure you want to delete this contact. (y/n) : "
     if gets.chomp().to_s == "y"
       @rolodex.delete_contact contact_id
+      @notice = "Contact ID #{contact_id} was deleted."
+    end
+  end
+
+  def undelete_contact
+    display_header
+    
+    @rolodex.deleted_contacts.each do |contact|
+
+      puts columnize contact.id, contact.first_name, contact.last_name,
+                     contact.email, contact.notes
+      puts
+
+    end
+    puts "\nDisplayed #{@rolodex.deleted_contacts.count} contact(s)."
+
+    input_id = get_id_from_user "Enter the ID of the contact to UN-DELETE: "
+    if @rolodex.undelete_contact input_id
+      @notice = "Contact ID #{input_id} was undeleted."
+    else
+      @notice = "Contact ID #{input_id} does not exist."
     end
   end
 

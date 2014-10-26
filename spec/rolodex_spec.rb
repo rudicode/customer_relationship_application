@@ -103,4 +103,24 @@ describe Rolodex do
       expect(contact).to be nil
     end
   end
+
+  describe "undelete contact" do
+    before(:each) do
+      @first_name = "Homer"
+      @last_name = "Simpson"
+      @email = "homer@home.com"
+      @notes = "Likes duff"
+      @index = @rolodex.index
+      @rolodex.add_contact @first_name, @last_name, @email, @notes
+    end
+  
+    it "should allow to undelete a contact" do
+      @rolodex.delete_contact(@index)
+      contact = @rolodex.find_contact_by_id(@index)
+      expect(contact).to be nil
+      @rolodex.undelete_contact @index
+      undeleted_contact = @rolodex.find_contact_by_id(@index)
+      expect(undeleted_contact).to be_truthy #not nil
+    end
+  end
 end
