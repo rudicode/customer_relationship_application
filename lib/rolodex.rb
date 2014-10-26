@@ -31,7 +31,13 @@ class Rolodex
       contact.email      = email
       contact.notes      = notes
     end
-    
+
     contact
+  end
+
+  def delete_contact id
+    contact = find_contact_by_id id
+    @contacts.delete contact
+    #
   end
 end

@@ -86,4 +86,21 @@ describe Rolodex do
       expect(updated_contact.notes).to eq notes
     end
   end
+
+  describe "delete_contact" do
+    before(:each) do
+      @first_name = "Homer"
+      @last_name = "Simpson"
+      @email = "homer@home.com"
+      @notes = "Likes duff"
+      @index = @rolodex.index
+      @rolodex.add_contact @first_name, @last_name, @email, @notes
+    end
+
+    it "should delete a contact" do
+      @rolodex.delete_contact(@index)
+      contact = @rolodex.find_contact_by_id(@index)
+      expect(contact).to be nil
+    end
+  end
 end

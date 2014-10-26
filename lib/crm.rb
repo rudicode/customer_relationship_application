@@ -66,7 +66,7 @@ class CRM
   def add_contact
     clear_screen
     
-    first_name, last_name, email, notes = get_contact_input "ADD CONTACT\n\n"
+    first_name, last_name, email, notes = get_contact_from_user "ADD CONTACT\n\n"
     
     @rolodex.add_contact first_name, last_name, email, notes
 
@@ -78,11 +78,8 @@ class CRM
 
   def display_all_contacts
 
-    puts
-    puts columnize " ID ", "First", "Last", "Email", "Notes"
-    puts columnize "----", "-----", "----", "-----", "-----"
-    puts
-
+    display_header
+    
     @rolodex.contacts.each do |contact|
 
       puts columnize contact.id, contact.first_name, contact.last_name,
@@ -96,10 +93,9 @@ class CRM
 
   def modify_contact
     display_all_contacts
-    print "Enter the ID of the contact to edit."
-    input_id = gets.chomp().to_i
+    input_id = get_id_from_user "Enter the ID of the contact to edit."
     
-    first_name, last_name, email, notes = get_contact_input "Edit Contact #{input_id}"
+    first_name, last_name, email, notes = get_contact_from_user "Edit Contact #{input_id}"
     
     contact = @rolodex.update_contact input_id, first_name, last_name, email, notes
     
@@ -111,7 +107,41 @@ class CRM
 
   end
 
-  def get_contact_input message
+  def display_contact message = "Enter the ID of the contact to display."
+    input_id = get_id_from_user message
+    contact = @rolodex.find_contact_by_id input_id
+    
+    unless contact
+      @notice = "Contact with id: #{input_id} Does Not exist."
+      return nil
+    end
+
+    display_header
+    puts columnize contact.id, contact.first_name, contact.last_name,
+                     contact.email, contact.notes
+    puts
+
+    wait_for_enter
+
+    return input_id
+    
+  end
+
+  def delete_contact
+    contact_id = display_contact "Enter the ID of the contact to DELETE: "
+    
+    puts "Are you sure you want to delete this contact. y/n"
+    if gets.chomp().to_s == "y"
+      @rolodex.delete_contact contact_id
+    end
+  end
+
+  def get_id_from_user message
+    print "#{message} "
+    input_id = gets.chomp().to_i
+  end
+
+  def get_contact_from_user message
     # routine to get the contact input from user.
     clear_screen
     puts "#{message}\n\n"
@@ -141,7 +171,7 @@ class CRM
       end
     end
 
-  stub :display_contact, :display_attribute, :delete_contact
+  stub :display_attribute
 
 
     def clear_screen
@@ -155,6 +185,13 @@ class CRM
 
     def clear_notice
       @notice = ""
+    end
+
+    def display_header
+      puts
+      puts columnize " ID ", "First", "Last", "Email", "Notes"
+      puts columnize "----", "-----", "----", "-----", "-----"
+      puts
     end
 
     def trigger_pry
