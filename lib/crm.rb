@@ -31,9 +31,9 @@ class CRM
       [ 2 ] Modify Contact
       [ 3 ] Display All
       [ 4 ] Display Contact
-      [ 5 ] Display Attribute
-      [ 6 ] Delete Contact
-      [ 7 ] Undelete Contact
+      [ 5 ] Display Attribute           Debug options
+      [ 6 ] Delete Contact          [ 98 ] Add Random contacts
+      [ 7 ] Undelete Contact        [ 99 ] Trigger pry
       [ 9 ] Exit
 
     }
@@ -58,6 +58,7 @@ class CRM
     when 5 then display_attribute
     when 6 then delete_contact
     when 7 then undelete_contact
+    when 9 then return
     when 99 then trigger_pry
     when 98 then add_a_bunch_of_contacts_so_i_dont_have_to_keep_typing_them_out
     else
@@ -74,7 +75,7 @@ class CRM
     @rolodex.add_contact first_name, last_name, email, notes
 
     # wait_for_enter
-    
+
     # no error checking yet, assume it was added.
     @notice = "#{first_name} #{last_name} added to contacts."
 
