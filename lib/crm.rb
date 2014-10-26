@@ -82,14 +82,23 @@ class CRM
 
   def display_all_contacts
 
+    clear_screen
+
     display_header
+
+    display_line = 1
     
     @rolodex.contacts.each do |contact|
 
       puts columnize contact.id, contact.first_name, contact.last_name,
                      contact.email, contact.notes
       puts
-
+      if display_line >= 12
+        wait_for_enter
+        puts
+        display_line = 1
+      end
+      display_line += 1
     end
     puts "\nDisplayed #{@rolodex.contacts.count} contact(s)."
 
