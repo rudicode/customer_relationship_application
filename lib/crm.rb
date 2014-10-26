@@ -49,7 +49,6 @@ class CRM
   end
 
   def process_option option
-    # puts "Processing option: #{option}"
     case option
     when 1 then add_contact
     when 2 then modify_contact
@@ -74,8 +73,6 @@ class CRM
     
     @rolodex.add_contact first_name, last_name, email, notes
 
-    # wait_for_enter
-
     # no error checking yet, assume it was added.
     @notice = "#{first_name} #{last_name} added to contacts."
 
@@ -93,21 +90,26 @@ class CRM
 
     end
     puts "\nDisplayed #{@rolodex.contacts.count} contact(s)."
-    # wait_for_enter
+
   end
 
   def modify_contact
     display_all_contacts
     input_id = get_id_from_user "Enter the ID of the contact to edit."
-    
+    contact_to_update = @rolodex.find_contact_by_id input_id
+    unless contact_to_update
+      @notice = "Contact with ID #{input_id} does not exist."
+      return
+    end
+
     first_name, last_name, email, notes = get_contact_from_user "Edit Contact #{input_id}"
     
-    contact = @rolodex.update_contact input_id, first_name, last_name, email, notes
+    updated_contact = @rolodex.update_contact input_id, first_name, last_name, email, notes
     
-    if contact
+    if updated_contact
       @notice = "Contact #{input_id} was updated."
     else
-      @notice = "Contact with ID #{input_id} does not exist."
+      @notice = "Contact with ID #{input_id} failed to update."
     end
 
   end
@@ -126,15 +128,14 @@ class CRM
                      contact.email, contact.notes
     puts
 
-    # wait_for_enter
-
     return input_id
     
   end
 
   def delete_contact
-    contact_id = display_contact "Enter the ID of the contact to DELETE: "
     
+    contact_id = display_contact "Enter the ID of the contact to DELETE: "
+    return if contact_id.nil?
     print "Are you sure you want to delete this contact. (y/n) : "
     if gets.chomp().to_s == "y"
       @rolodex.delete_contact contact_id
@@ -162,31 +163,31 @@ class CRM
     end
   end
 
-  def get_id_from_user message
-    print "#{message} "
-    input_id = gets.chomp().to_i
-  end
-
-  def get_contact_from_user message
-    # routine to get the contact input from user.
-    clear_screen
-    puts "#{message}\n\n"
-
-    print "First name: "
-    first_name = gets.chomp().to_s
-
-    print "Last name : "
-    last_name = gets.chomp().to_s
-
-    print "email     : "
-    email = gets.chomp().to_s
-
-    print "Notes     : "
-    notes = gets.chomp().to_s
-    return first_name, last_name, email, notes
-  end
-
   private
+
+    def get_id_from_user message
+      print "#{message} "
+      input_id = gets.chomp().to_i
+    end
+
+    def get_contact_from_user message
+      # routine to get the contact input from user.
+      clear_screen
+      puts "#{message}\n\n"
+
+      print "First name: "
+      first_name = gets.chomp().to_s
+
+      print "Last name : "
+      last_name = gets.chomp().to_s
+
+      print "email     : "
+      email = gets.chomp().to_s
+
+      print "Notes     : "
+      notes = gets.chomp().to_s
+      return first_name, last_name, email, notes
+    end
 
     def self.stub(*names)
       # refactored with help from ...
