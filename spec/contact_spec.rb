@@ -9,6 +9,11 @@ describe Contact do
   	@contact = Contact.new @first_name, @last_name, @email, @notes
   end
 
+  it "should return an array of it's attributes" do
+    attributes = Contact.attributes
+    expect(attributes).to eq ["id", "first_name", "last_name", "email", "notes"]
+  end
+
   it "should allow access to data" do
     expect(@contact.first_name).to eq @first_name
     expect(@contact.last_name).to eq @last_name

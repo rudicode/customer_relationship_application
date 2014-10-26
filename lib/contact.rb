@@ -1,5 +1,9 @@
 class Contact
 
+	def self.attributes
+  	["id", "first_name", "last_name", "email", "notes"]
+  end
+
   attr_accessor   :id, :first_name, :last_name, :email, :notes
 
   def initialize first_name, last_name, email, notes
@@ -15,5 +19,9 @@ class Contact
 
   def to_s
     "#{@first_name} #{@last_name} #{@email} [ #{@notes} ]"
+  end
+
+  def attributes
+  	["id", "first_name", "last_name", "email", "notes"]
   end
 end

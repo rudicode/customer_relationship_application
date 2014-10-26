@@ -104,9 +104,54 @@ class CRM
 
   end
 
+  def display_attribute
+    
+    attributes = Contact.attributes
+    message = "Which Attribute?\n\n"
+    attributes.each_with_index do |attribute,index|
+      message += "    [ #{index} ] #{attribute}\n"
+    end
+    message += "\n Enter attribute number -> "
+    
+    attribute_number = get_number_from_user message
+  puts attribute_number
+    unless attribute_number.between?(0,attributes.length) 
+      @notice = "Error, did not select attribute."
+      return
+    end
+
+    clear_screen
+    display_line = 1
+    puts "Display attribute: #{attributes[attribute_number]}\n"
+    puts "-------------------------------"
+
+    lines = []
+
+    @rolodex.contacts.each do |contact|
+      current_attribute = contact.send("#{attributes[attribute_number]}")
+      lines << current_attribute
+      lines << "\n"
+    end
+    display_with_pages lines
+  end
+
+  def display_with_pages lines
+    display_line = 1
+
+    lines.each do |line|
+      puts line
+      if display_line >= 24
+        wait_for_enter
+        puts
+        display_line = 1
+      end
+      display_line += 1
+    end
+  end
+
   def modify_contact
     display_all_contacts
-    input_id = get_id_from_user "Enter the ID of the contact to edit."
+    input_id = get_number_from_user "Enter the ID of the contact to edit."
     contact_to_update = @rolodex.find_contact_by_id input_id
     unless contact_to_update
       @notice = "Contact with ID #{input_id} does not exist."
@@ -126,7 +171,7 @@ class CRM
   end
 
   def display_contact message = "Enter the ID of the contact to display."
-    input_id = get_id_from_user message
+    input_id = get_number_from_user message
     contact = @rolodex.find_contact_by_id input_id
     
     unless contact
@@ -166,7 +211,7 @@ class CRM
     end
     puts "\nDisplayed #{@rolodex.deleted_contacts.count} contact(s)."
 
-    input_id = get_id_from_user "Enter the ID of the contact to UN-DELETE: "
+    input_id = get_number_from_user "Enter the ID of the contact to UN-DELETE: "
     if @rolodex.undelete_contact input_id
       @notice = "Contact ID #{input_id} was undeleted."
     else
@@ -180,7 +225,7 @@ class CRM
 
   private
 
-    def get_id_from_user message
+    def get_number_from_user message
       print "#{message} "
       input_id = gets.chomp().to_i
     end
@@ -213,7 +258,7 @@ class CRM
       end
     end
 
-  stub :display_attribute
+  # stub :display_attribute
 
 
     def clear_screen
