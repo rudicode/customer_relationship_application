@@ -1,7 +1,8 @@
 class Contact
 
+  @@attributes = ["id", "first_name", "last_name", "email", "notes"]
 	def self.attributes
-  	["id", "first_name", "last_name", "email", "notes"]
+    @@attributes
   end
 
   attr_accessor   :id, :first_name, :last_name, :email, :notes
@@ -21,7 +22,4 @@ class Contact
     "#{@first_name} #{@last_name} #{@email} [ #{@notes} ]"
   end
 
-  def attributes
-  	["id", "first_name", "last_name", "email", "notes"]
-  end
 end
