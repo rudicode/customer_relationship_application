@@ -116,7 +116,7 @@ describe Rolodex do
       @index = @rolodex.index
       @rolodex.add_contact @first_name, @last_name, @email, @notes
     end
-  
+
     it "should allow to undelete a contact" do
       @rolodex.delete_contact(@index)
       contact = @rolodex.find_contact_by_id(@index)

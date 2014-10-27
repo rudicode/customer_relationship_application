@@ -1,30 +1,30 @@
 class Persistence
 
-	attr_reader :list
+  attr_reader :list
 
-	def initialize name
-		@file_name = "data/#{name}.csv"
+  def initialize name
+    @file_name = "data/#{name}.csv"
     load_data
-	end
+  end
 
-	def save_data data
+  def save_data data
     CSV.open(@file_name, "wb") do |csv|
-      
+
       data.each do |row|
-      	csv << row
+        csv << row
       end
-      
+
     end
-	end
-	
-	def load_data
-		
-		if File.file?(@file_name)
-			if @list = CSV.read(@file_name, converters: :numeric)
-				#data loaded
-			end
-		end
-		
-	end
-	
+  end
+
+  def load_data
+
+    if File.file?(@file_name)
+      if @list = CSV.read(@file_name, converters: :numeric)
+        #data loaded
+      end
+    end
+
+  end
+
 end

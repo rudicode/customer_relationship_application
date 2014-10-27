@@ -2,11 +2,11 @@ require_relative '../lib/contact'
 
 describe Contact do
   before :each do
-  	@first_name = "Homer"
+    @first_name = "Homer"
     @last_name = "Simpson"
     @email = "homer@home.com"
     @notes = "Likes duff"
-  	@contact = Contact.new @first_name, @last_name, @email, @notes
+    @contact = Contact.new @first_name, @last_name, @email, @notes
   end
 
   it "should return an array of it's attributes" do

@@ -25,7 +25,7 @@ class CRM
     menu = %{
       #{@notice}
 
-      #{@name}
+    #{@name}
 
       [ 1 ] Add Contact
       [ 2 ] Modify Contact
@@ -70,9 +70,9 @@ class CRM
 
   def add_contact
     clear_screen
-    
+
     first_name, last_name, email, notes = get_contact_from_user "ADD CONTACT\n\n"
-    
+
     @rolodex.add_contact first_name, last_name, email, notes
 
     # no error checking yet, assume it was added.
@@ -87,10 +87,10 @@ class CRM
     display_header
 
     lines = []
-    
+
     @rolodex.contacts.each do |contact|
       lines << columnize(contact.id, contact.first_name, contact.last_name,
-                     contact.email, contact.notes)
+                         contact.email, contact.notes)
       lines << "\n"
     end
 
@@ -101,7 +101,7 @@ class CRM
   end
 
   def display_attribute
-    
+
     attributes = Contact.attributes
     message = "Which Attribute?\n\n"
     attributes.each_with_index do |attribute,index|
@@ -109,7 +109,7 @@ class CRM
     end
 
     message += "\n Enter attribute number -> "
-    
+
     attribute_number = get_number_from_user message
 
     unless attribute_number.between?(0,attributes.length) 
@@ -129,7 +129,7 @@ class CRM
       lines << current_attribute
       lines << "\n"
     end
-    
+
     display_with_pages lines
 
   end
@@ -158,9 +158,9 @@ class CRM
     end
 
     first_name, last_name, email, notes = get_contact_from_user "Edit Contact #{input_id}"
-    
+
     updated_contact = @rolodex.update_contact input_id, first_name, last_name, email, notes
-    
+
     if updated_contact
       @notice = "Contact #{input_id} was updated."
     else
@@ -172,7 +172,7 @@ class CRM
   def display_contact message = "Enter the ID of the contact to display."
     input_id = get_number_from_user message
     contact = @rolodex.find_contact_by_id input_id
-    
+
     unless contact
       @notice = "Contact with id: #{input_id} Does Not exist."
       return nil
@@ -180,15 +180,15 @@ class CRM
 
     display_header
     puts columnize contact.id, contact.first_name, contact.last_name,
-                     contact.email, contact.notes
+      contact.email, contact.notes
     puts
 
     return input_id
-    
+
   end
 
   def delete_contact
-    
+
     contact_id = display_contact "Enter the ID of the contact to DELETE: "
     return if contact_id.nil?
     print "Are you sure you want to delete this contact. (y/n) : "
@@ -200,11 +200,11 @@ class CRM
 
   def undelete_contact
     display_header
-    
+
     @rolodex.deleted_contacts.each do |contact|
 
       puts columnize contact.id, contact.first_name, contact.last_name,
-                     contact.email, contact.notes
+        contact.email, contact.notes
       puts
 
     end
@@ -224,87 +224,87 @@ class CRM
 
   private
 
-    def get_number_from_user message
-      print "#{message} "
-      input_id = gets.chomp().to_i
-    end
+  def get_number_from_user message
+    print "#{message} "
+    input_id = gets.chomp().to_i
+  end
 
-    def get_contact_from_user message
-      # routine to get the contact input from user.
-      clear_screen
-      puts "#{message}\n\n"
+  def get_contact_from_user message
+    # routine to get the contact input from user.
+    clear_screen
+    puts "#{message}\n\n"
 
-      print "First name: "
-      first_name = gets.chomp().to_s
+    print "First name: "
+    first_name = gets.chomp().to_s
 
-      print "Last name : "
-      last_name = gets.chomp().to_s
+    print "Last name : "
+    last_name = gets.chomp().to_s
 
-      print "email     : "
-      email = gets.chomp().to_s
+    print "email     : "
+    email = gets.chomp().to_s
 
-      print "Notes     : "
-      notes = gets.chomp().to_s
-      return first_name, last_name, email, notes
-    end
+    print "Notes     : "
+    notes = gets.chomp().to_s
+    return first_name, last_name, email, notes
+  end
 
-    def self.stub(*names)
-      # refactored with help from ...
-      names.each do |name|
-        define_method(name) do
-          @notice = "#{self.class}##{name} Not implemented yet!!"
-        end
+  def self.stub(*names)
+    # refactored with help from ...
+    names.each do |name|
+      define_method(name) do
+        @notice = "#{self.class}##{name} Not implemented yet!!"
       end
     end
+  end
 
   # stub :display_attribute
 
 
-    def clear_screen
-      puts"\e[H\e[2J"
+  def clear_screen
+    puts"\e[H\e[2J"
+  end
+
+  def wait_for_enter
+    print"\nPress ENTER to continue."
+    gets
+  end
+
+  def clear_notice
+    @notice = ""
+  end
+
+  def display_header
+    puts
+    puts columnize " ID ", "First", "Last", "Email", "Notes"
+    puts columnize "----", "-----", "----", "-----", "-----"
+    puts
+  end
+
+  def trigger_pry
+    # need to have the pry gem installed to use this
+    # also the pry-byebug gem for ruby 2.x.x, adds debugger
+    binding.pry
+  end
+
+  def add_a_bunch_of_contacts_so_i_dont_have_to_keep_typing_them_out
+
+    first = ["Andy", "Jim", "Mary", "Amy", "George", "Lucas", "Chris", "Matt", "Sarah", "Julie"]
+    last = ["Smith", "Martinez", "Parker", "Black", "Johnson", "King", "Nolin", "Verges", "Kerns"]
+    domain = ["google", "bell", "example", "sympatico", "rogers", "hotmail"]
+    email_suffix = [".com", ".net", ".org", ".tv"]
+    notes = "Some notes go here."
+
+    11.times do |count|
+      first_name = first.sample
+      last_name = last.sample
+      email = first_name + "." + last_name + "@" + domain.sample + email_suffix.sample
+
+      @rolodex.add_contact first_name, last_name, email.downcase, notes
     end
+  end
 
-    def wait_for_enter
-      print"\nPress ENTER to continue."
-      gets
-    end
-
-    def clear_notice
-      @notice = ""
-    end
-
-    def display_header
-      puts
-      puts columnize " ID ", "First", "Last", "Email", "Notes"
-      puts columnize "----", "-----", "----", "-----", "-----"
-      puts
-    end
-
-    def trigger_pry
-      # need to have the pry gem installed to use this
-      # also the pry-byebug gem for ruby 2.x.x, adds debugger
-      binding.pry
-    end
-
-    def add_a_bunch_of_contacts_so_i_dont_have_to_keep_typing_them_out
-
-      first = ["Andy", "Jim", "Mary", "Amy", "George", "Lucas", "Chris", "Matt", "Sarah", "Julie"]
-      last = ["Smith", "Martinez", "Parker", "Black", "Johnson", "King", "Nolin", "Verges", "Kerns"]
-      domain = ["google", "bell", "example", "sympatico", "rogers", "hotmail"]
-      email_suffix = [".com", ".net", ".org", ".tv"]
-      notes = "Some notes go here."
-
-      11.times do |count|
-        first_name = first.sample
-        last_name = last.sample
-        email = first_name + "." + last_name + "@" + domain.sample + email_suffix.sample
-        
-        @rolodex.add_contact first_name, last_name, email.downcase, notes
-      end
-    end
-
-    def columnize id, a, b, c, d
-      left_padding = "  "
-      left_padding + id.to_s.ljust(6) + a.ljust(10) + b.ljust(16) + c.ljust(32) + d
-    end
+  def columnize id, a, b, c, d
+    left_padding = "  "
+    left_padding + id.to_s.ljust(6) + a.ljust(10) + b.ljust(16) + c.ljust(32) + d
+  end
 end

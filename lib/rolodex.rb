@@ -10,7 +10,7 @@ class Rolodex
     load_rolodex
   end
 
-  
+
 
   def add_contact first_name, last_name, email, notes
     contact = Contact.new first_name, last_name, email, notes
@@ -26,7 +26,7 @@ class Rolodex
     end
     found_contact
   end
-  
+
   def find_deleted_by_id id
     found_contact = nil
     @deleted_contacts.each do |contact|
@@ -36,9 +36,9 @@ class Rolodex
   end
 
   def update_contact id, first_name, last_name, email, notes
-    
+
     contact = find_contact_by_id id
-    
+
     if contact
       contact.first_name = first_name
       contact.last_name  = last_name
