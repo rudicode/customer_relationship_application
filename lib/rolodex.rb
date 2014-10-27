@@ -6,7 +6,7 @@ class Rolodex
     @index = 501
     @contacts = []
     @deleted_contacts = []
-    @persistence = Persistence.new @name
+    @persistence = Persistence.new "data/#{@name}.csv"
     load_rolodex
   end
 
