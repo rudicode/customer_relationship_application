@@ -21,6 +21,10 @@ describe Contact do
     expect(@contact.notes).to eq @notes
   end
 
+  it "should have an id." do
+    expect(@contact.id).to be_truthy #not nil
+  end
+
   it "should return full_name" do
     expect(@contact.full_name).to eq "#{@first_name} #{@last_name}"
   end

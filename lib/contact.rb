@@ -12,6 +12,7 @@ class Contact
     @last_name = last_name
     @email = email
     @notes = notes
+    @id = 0
   end
 
   def full_name

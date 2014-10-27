@@ -26,11 +26,13 @@ describe Rolodex do
     end
 
     it "should add the correct contact" do
+      @initial_index = @rolodex.index
       @rolodex.add_contact @first_name, @last_name, @email, @notes
       expect(@rolodex.contacts.last.first_name).to be @first_name
       expect(@rolodex.contacts.last.last_name).to be @last_name
       expect(@rolodex.contacts.last.email).to be @email
       expect(@rolodex.contacts.last.notes).to be @notes
+      expect(@rolodex.contacts.last.id).to be @initial_index
     end
 
     it "should increment the contact index" do
